@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import {useAuth } from "../lib/auth"
 
+
 const Home = () =>  {
   const auth = useAuth()
 
