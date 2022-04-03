@@ -53,7 +53,9 @@ const DashboardShell = ({ children }) => {
                 </Breadcrumb>
                 <Flex justifyContent="space-between">
                     <Heading mb={8}>My Sites</Heading>
-                    <AddSiteModal />
+                    <AddSiteModal >
+                        + Add Site
+                    </AddSiteModal>
                 </Flex>
                 {children}
             </Flex>

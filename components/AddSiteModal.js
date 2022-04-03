@@ -18,20 +18,24 @@ import {
 
 import { createSite } from '../lib/db';
 import { useAuth } from '../lib/auth';
+import fetcher from '../utils/fetcher'
+
 
 const AddSiteModal = ({ children }) => {
     const toast = useToast();
     const auth = useAuth();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { handleSubmit, register } = useForm();
+    // const {data} = useSWR('/api/sites', fetcher);
 
     const onCreateSite = ({ name, url }) => {
-        createSite({
+        const newSite = {
             authorId: auth.user.uid,
             createdAt: new Date().toISOString(),
             name,
             url,
-        });
+        }
+        createSite(newSite);
         toast({
             title: 'Success!',
             description: "We've added your site.",
@@ -39,6 +43,14 @@ const AddSiteModal = ({ children }) => {
             duration: 5000,
             isClosable: true
         });
+        mutate(
+            '/api/sites',
+            async (data) => {
+                return { sites: [...data.sites, newSite] }
+            },
+            false
+        );
+
         onClose();
     }
 
@@ -54,7 +66,7 @@ const AddSiteModal = ({ children }) => {
                     bg: 'gray.800',
                     transform: 'scale(0.95)'
                 }}
-                onClick={onOpen}> + Add Site</Button>
+                onClick={onOpen}> {children}</Button>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent as="form" onSubmit={handleSubmit(onCreateSite)}>
