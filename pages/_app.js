@@ -8,7 +8,6 @@ const GlobalStyle = ({ children }) => {
 
   return (
     <>
-      <CSSReset />
       <Global
         styles={css`
           html {

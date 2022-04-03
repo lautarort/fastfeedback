@@ -17,20 +17,32 @@ import {
 } from '@chakra-ui/react';
 
 import { createSite } from '../lib/db';
-// import { useAuth } from '../lib/auth';
+import { useAuth } from '../lib/auth';
 
 const AddSiteModal = ({ children }) => {
-    // const toast = useToast();
-    // const auth = useAuth();
+    const toast = useToast();
+    const auth = useAuth();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { handleSubmit, register } = useForm();
 
-    // const onCreateSite = ({ name, url }) => {
+    const onCreateSite = ({ site, url }) => {
+        createSite({
+            authorId: auth.user.uid,
+            createdAt: new Date().toISOString(),
+            site,
+            url,
+        });
+        toast({
+            title: 'Success!',
+            description: "We've added your site.",
+            status: 'success',
+            duration: 5000,
+            isClosable: true
+        });
+        onClose();
+    }
     //     const newSite = {
-    //         authorId: auth.user.uid,
-    //         createdAt: new Date().toISOString(),
-    //         name,
-    //         url,
+
     //         settings: {
     //             icons: true,
     //             timestamp: true,
@@ -39,13 +51,7 @@ const AddSiteModal = ({ children }) => {
     //     };
 
     //     const { id } = createSite(newSite);
-    //     toast({
-    //         title: 'Success!',
-    //         description: "We've added your site.",
-    //         status: 'success',
-    //         duration: 5000,
-    //         isClosable: true
-    //     });
+
     //     mutate(
     //         ['/api/sites', auth.user.token],
     //         async (data) => ({
@@ -70,7 +76,7 @@ const AddSiteModal = ({ children }) => {
                 onClick={onOpen}> + Add Site</Button>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent as="form" onSubmit={handleSubmit(createSite)}>
+                <ModalContent as="form" onSubmit={handleSubmit(onCreateSite)}>
                     <ModalHeader fontWeight="bold">Add Site</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
@@ -80,7 +86,7 @@ const AddSiteModal = ({ children }) => {
                                 id="site-input"
                                 placeholder="My site"
                                 name="name"
-                                {...register('name', { required: true })}
+                                {...register('site', { required: true })}
                             />
                         </FormControl>
 
@@ -90,7 +96,7 @@ const AddSiteModal = ({ children }) => {
                                 id="link-input"
                                 placeholder="https://website.com"
                                 name="url"
-                                {...register('link', { required: true })}
+                                {...register('url', { required: true })}
                             />
                         </FormControl>
                     </ModalBody>
