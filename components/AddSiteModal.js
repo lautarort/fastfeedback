@@ -25,11 +25,11 @@ const AddSiteModal = ({ children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { handleSubmit, register } = useForm();
 
-    const onCreateSite = ({ site, url }) => {
+    const onCreateSite = ({ name, url }) => {
         createSite({
             authorId: auth.user.uid,
             createdAt: new Date().toISOString(),
-            site,
+            name,
             url,
         });
         toast({
@@ -41,26 +41,7 @@ const AddSiteModal = ({ children }) => {
         });
         onClose();
     }
-    //     const newSite = {
 
-    //         settings: {
-    //             icons: true,
-    //             timestamp: true,
-    //             ratings: false
-    //         }
-    //     };
-
-    //     const { id } = createSite(newSite);
-
-    //     mutate(
-    //         ['/api/sites', auth.user.token],
-    //         async (data) => ({
-    //             sites: [{ id, ...newSite }, ...data.sites]
-    //         }),
-    //         false
-    //     );
-    //     onClose();
-    // };
 
     return (
         <>
@@ -86,7 +67,7 @@ const AddSiteModal = ({ children }) => {
                                 id="site-input"
                                 placeholder="My site"
                                 name="name"
-                                {...register('site', { required: true })}
+                                {...register('name', { required: true })}
                             />
                         </FormControl>
 
